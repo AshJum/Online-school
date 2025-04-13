@@ -17,35 +17,35 @@
    git clone https://github.com/AshJum/Online-school.git
    cd Online-school
 
-   Create and activate a virtual environment:
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
 
-Install dependencies:
+3. Run migrations:
+   ```bash
+   python manage.py migrate
 
-pip install -r requirements.txt
+4. Create a superuser:
+   ```bash
+   python manage.py createsuperuser
 
-Run migrations:
+5. Start the development server:
+   ```bash
+   python manage.py runserver
 
-python manage.py migrate
-
-Create a superuser:
-
-python manage.py createsuperuser
-
-Start the development server:
-
-python manage.py runserver
-
-Open your browser and go to:
-
+6. Open your browser and go to:
+   ```bash
     http://127.0.0.1:8000/
 
-Usage
+ ## Usage
 
-    Admins (superusers) can log in to /admin/ to upload lessons and manage users.
+   Admins (superusers) can log in to /admin/ to upload lessons and manage users.
 
-    Teachers have access to grading and scheduling tools.
+   Teachers have access to grading and scheduling tools.
 
-    Students can view their grades and schedules.
+   Students can view their grades and schedules.
