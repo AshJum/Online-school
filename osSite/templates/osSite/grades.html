@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ԻՄ գնահատականները - Օնլաին Դպրոց</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        a.button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            margin-top: auto;
+        }
+
+                nav form {
+            margin: 0;
+        }
+
+        nav form button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        nav form button:hover {
+            background-color: #e63939;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Օնլայն դպրոց</h1>
+    </header>
+
+    <nav>
+        <div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'home' %}">Գլխավոր</a>
+                <a href="{% url 'video_lessons' %}2">Վիդեո դաս</a>
+                {% if has_attribute %}
+                    <a href="{% url 'add_grade' %}">Գնահատել</a>
+                    <a href="{% url 'grade_list' %}">Գնահատականների ցուցակ</a>
+                {% endif %}
+                <a href="{% url 'schedule' %}">Դասացուցակ</a>
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Դուրս գալ</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <h2>Ձեր գնահատականները</h2>
+
+        {% if grades %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Առարկա</th>
+                        <th>Գնահատական</th>
+                        <th>Ամսաթիվ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                        <tr>
+                            <td>{{ grade.subject }}</td>
+                            <td>{{ grade.score }}</td>
+                            <td>{{ grade.date }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Դուք դեռ չունեք գնահատականներ.</p>
+        {% endif %}
+
+        <p><a class="button" href="{% url 'home' %}">Վերադառնալ գլխավոր</a></p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Օնլայն դպրոց: Բոլոր իրավունքները պահպանված են։</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Դասացուցակ - Օնլայն Դպրոց</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        nav form button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        nav form button:hover {
+            background-color: #e63939;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 35px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #0056b3;
+        }
+
+        .form-container {
+            margin: 20px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form input, form select, form button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        .schedule-list {
+            margin-top: 20px;
+        }
+
+        .schedule-item {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Օնլայն դպրոց - Դասացուցակ</h1>
+    </header>
+
+    <nav>
+        <div>
+            <a href="{% url 'home' %}">Գլխավոր</a>
+            <a href="{% url 'video_lessons' %}2">Վիդեո դաս</a>
+            {% if has_attribute %}
+                <a href="{% url 'add_grade' %}">Գնահատել</a>
+                <a href="{% url 'grade_list' %}">Գնահատականների ցուցակ</a>
+            {% else %}
+                <a href="{% url 'grades' %}">Գնահատականներ</a>
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Դուրս գալ</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        {% if has_attribute %}
+            <h2>Ավելացնել դասացուցակ</h2>
+            <div class="form-container">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Պահպանել</button>
+                </form>
+            </div>
+
+            <h2></h2>
+            <div class="schedule-list">
+                {% for lesson in lessons %}
+                    <div class="schedule-item">
+                        <p><strong>Ուսանող:</strong> {{ lesson.student.username }}</p>
+                        <p><strong>Ամսաթիվ:</strong> {{ lesson.lesson_date }}</p>
+                        <form method="post" action="{% url 'delete_lesson' lesson.id %}">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Վստա՞հ եք, որ ցանկանում եք ջնջել այս դասը:');">
+                                Ջնջել
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h2>Ձեր դասացուցակը</h2>
+            <div class="schedule-list">
+                {% for lesson in lessons %}
+                    <div class="schedule-item">
+                        <p><strong>Դասախոս:</strong> {{ lesson.teacher.username }}</p>
+                        <p><strong>Ամսաթիվ:</strong> {{ lesson.lesson_date }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Օնլայն դպրոց: Բոլոր իրավունքները պահպանված են.</p>
+    </footer>
+</body>
+</html>

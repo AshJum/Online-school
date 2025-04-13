@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Գնահատում - Օնլաին Դպրոց</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        nav form {
+            margin: 0;
+        }
+
+        nav form button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        nav form button:hover {
+            background-color: #e63939;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .container h2 {
+            color: #0056b3;
+            text-align: center;
+        }
+
+        .container form {
+            margin-top: 20px;
+        }
+
+        .container form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .container form button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Օնլայն Դպրոց</h1>
+    </header>
+
+    <nav>
+        <div>
+            <a href="{% url 'home' %}">Գլխավոր</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'video_lessons' %}">Վիդեո դաս</a>
+                {% if has_attribute %}
+                    <a href="{% url 'grade_list' %}">Գնահատականների ցուցակ</a>
+                {% else %}
+                    <a href="{% url 'grades' %}">Գնահատականներ</a>
+                {% endif %}
+                <a href="{% url 'schedule' %}">Դասացուցակ</a>
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Դուրս գալ</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <h2>Գնահատել</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Պահպանել</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Օնլայն դպրոց: Բոլոր իրավունքները պահպանված են:</p>
+    </footer>
+</body>
+</html>
